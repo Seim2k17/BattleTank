@@ -21,23 +21,6 @@ void ATankPlayerController::Tick(float DeltaTime)
     AimTowardsCrosshair();
 }
 
-void ATankPlayerController::GetLookVectorHitLocation(FVector LookDirection)
-{
-	FHitResult HitResult;
-	FVector StartTrace = FVector::ZeroVector;
-	if (auto Tank = GetControlledTank())
-	{
-		StartTrace = Tank->GetActorLocation();
-	}
-	// Position of the Middle of the screen, but with length X 
-	FVector EndTrace = LineTraceRange * LookDirection;
-	FCollisionQueryParams QueryParams;
-	GetWorld()->LineTraceSingleByChannel(HitResult, StartTrace, EndTrace,
-		ECollisionChannel::ECC_Visibility, QueryParams);
-
-	DrawDebugLine(GetWorld(), StartTrace, EndTrace, FColor::Red, true, 3.f, 0, 2.f);
-}
-
 void ATankPlayerController::AimTowardsCrosshair()
 {
     if (!GetControlledTank())
@@ -73,19 +56,30 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector& HitLocation) const
     FVector LookDirection;
     if (GetLookDirection(ScreenLocation, LookDirection))
     {
-		// GetLookVectorHitLocation(LookDirection);
+		bool test = GetLookVectorHitLocation(LookDirection);
         UE_LOG(LogTemp, Warning, TEXT("WorldDirection: %s"), *LookDirection.ToString());
     }
 
-    // Line-trace along that look direction, and see what we hit (up to max range)
-
-    
-    //
-    //   if (HitResult.bBlockingHit) {
-    //     HitLocation = HitResult.ImpactPoint;
-    //     return true;
-    //   }
     return false;
+}
+
+bool ATankPlayerController::GetLookVectorHitLocation(FVector LookDirection) const
+{
+    FHitResult HitResult;
+    FVector StartTrace = FVector::ZeroVector;
+    if (auto* Tank = GetControlledTank())
+    {
+        StartTrace = Tank->GetActorLocation();
+    }
+    // Position of the Middle of the screen, but with length X 
+    FVector EndTrace = LineTraceRange * LookDirection;
+    FCollisionQueryParams QueryParams;
+    bool returnVal = GetWorld()->LineTraceSingleByChannel(HitResult, StartTrace, EndTrace,
+        ECollisionChannel::ECC_Visibility, QueryParams);
+
+    DrawDebugLine(GetWorld(), StartTrace, EndTrace, FColor::Red, true, 3.f, 0, 2.f);
+
+    return returnVal;
 }
 
 bool ATankPlayerController::GetLookDirection(FVector2D ScreenLocation, FVector& LookDirection) const

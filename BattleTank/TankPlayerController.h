@@ -23,7 +23,7 @@ public:
 
   void Tick(float DeltaTime) override;
 
-  void GetLookVectorHitLocation(FVector LookDirection);
+  bool GetLookVectorHitLocation(FVector LookDirection) const;
 
 private:
   // start the tank moving the barrel so that the shot would hit what the
