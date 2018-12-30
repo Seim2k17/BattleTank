@@ -23,7 +23,7 @@ public:
 
   void Tick(float DeltaTime) override;
 
-  bool GetLookVectorHitLocation(FVector LookDirection) const;
+  bool GetLookVectorHitLocation(FVector LookDirection, FVector& HitLocation ) const;
 
 private:
   // start the tank moving the barrel so that the shot would hit what the
@@ -40,5 +40,6 @@ private:
   UPROPERTY(EditAnywhere, Category = "Aiming")
   float CrossHairYLocation = 0.3333333f;
 
-  float LineTraceRange = 10000000;
+  UPROPERTY(EditAnywhere)
+  float LineTraceRange = 1000000;
 };

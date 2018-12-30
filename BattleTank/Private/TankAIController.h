@@ -2,8 +2,8 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
 #include "AIController.h"
+#include "CoreMinimal.h"
 #include "TankAIController.generated.h"
 
 class ATank;
@@ -11,14 +11,16 @@ class ATank;
 UCLASS()
 class ATankAIController : public AAIController
 {
-	GENERATED_BODY()
-	
-	
+    GENERATED_BODY()
+
+public:
+    ATankAIController();
+    void Tick(float DeltaTime) override;
+
 protected:
+    void BeginPlay() override;
 
-	void BeginPlay() override;
-	
-	ATank* GetControlledTank() const;
+    ATank* GetControlledTank() const;
 
-	ATank* GetPlayerTank() const;
+    ATank* GetPlayerTank() const;
 };

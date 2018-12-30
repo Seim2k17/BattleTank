@@ -2,27 +2,27 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "CoreMinimal.h"
 #include "Tank.generated.h"
+
+class UTankAimingComponent;
 
 UCLASS()
 class BATTLETANK_API ATank : public APawn
 {
-	GENERATED_BODY()
-	
-public:	
-	
-	ATank();
+    GENERATED_BODY()
+
+public:
+    ATank();
 
 protected:
-	
-	void BeginPlay() override;
+    void BeginPlay() override;
 
-public:	
-	
-	void Tick(float DeltaTime) override;
+    UTankAimingComponent* TankAimingComp;
 
-	
-	
+public:
+    void Tick(float DeltaTime) override;
+
+    void AimAt(FVector HitLocation);
 };
