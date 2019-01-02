@@ -74,7 +74,7 @@ bool ATankPlayerController::GetLookVectorHitLocation(FVector LookDirection,
     if (GetWorld()->LineTraceSingleByChannel(HitResult, StartTrace, EndTrace,
                                              ECollisionChannel::ECC_Visibility, QueryParams))
     {
-        DrawDebugLine(GetWorld(), StartTrace, EndTrace, FColor::Red, true, 3.f, 0, 2.f);
+        // DrawDebugLine(GetWorld(), StartTrace, EndTrace, FColor::Red, true, 3.f, 0, 2.f);
 
         HitLocation = HitResult.Location;
         return true;

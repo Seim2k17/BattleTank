@@ -42,12 +42,12 @@ ATank* ATankAIController::GetControlledTank() const
 
     if (Tank)
     {
-        UE_LOG(LogTemp, Warning, TEXT("AIController: The Controlled Tank is: %s"),
-               *GetPawn()->GetName());
+//         UE_LOG(LogTemp, Warning, TEXT("AIController: The Controlled Tank is: %s"),
+//                *GetPawn()->GetName());
     }
     else
     {
-        UE_LOG(LogTemp, Warning, TEXT("No posseded Tank found."));
+//        UE_LOG(LogTemp, Warning, TEXT("No posseded Tank found."));
     }
 
     return Tank;
@@ -59,11 +59,11 @@ ATank* ATankAIController::GetPlayerTank() const
 
     if (PlayerTank)
     {
-        UE_LOG(LogTemp, Log, TEXT("The Player is: %s"), *PlayerTank->GetName());
+//        UE_LOG(LogTemp, Log, TEXT("The Player is: %s"), *PlayerTank->GetName());
     }
     else
     {
-        UE_LOG(LogTemp, Warning, TEXT("No Player found"));
+  //      UE_LOG(LogTemp, Warning, TEXT("No Player found"));
     }
 
     return PlayerTank;
