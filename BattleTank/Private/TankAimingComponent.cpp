@@ -1,36 +1,17 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "TankAimingComponent.h"
+#include "TankBarrel.h"
 #include "Kismet/GameplayStatics.h"
 
-// Sets default values for this component's properties
 UTankAimingComponent::UTankAimingComponent()
 {
-    // Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-    // off to improve performance if you don't need them.
-    PrimaryComponentTick.bCanEverTick = true;
-
-    // ...
+    PrimaryComponentTick.bCanEverTick = false;
 }
 
 void UTankAimingComponent::SetBarrelReference(UStaticMeshComponent* BarrelToSet)
 {
-    Barrel = BarrelToSet;
-}
-
-// Called when the game starts
-void UTankAimingComponent::BeginPlay()
-{
-    Super::BeginPlay();
-
-    // ...
-}
-
-// Called every frame
-void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType,
-                                         FActorComponentTickFunction* ThisTickFunction)
-{
-    Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+    Barrel->SetBarrelReference(BarrelToSet);
 }
 
 void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
@@ -44,15 +25,30 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
     FVector OutLaunchVelocity;
     FVector StartLocation = Barrel->GetSocketLocation(FName("ProjectileStart"));
 
-    // Calculate the OutLaunchVelocity and only if success, succeed
-    if (UGameplayStatics::SuggestProjectileVelocity(this, OutLaunchVelocity, StartLocation,
+    bool bHaveAimSolution =
+        UGameplayStatics::SuggestProjectileVelocity(this, OutLaunchVelocity, StartLocation,
                                                     HitLocation, LaunchSpeed, false, 0.f, 0.f,
-                                                    ESuggestProjVelocityTraceOption::TraceFullPath))
+                                                    ESuggestProjVelocityTraceOption::TraceFullPath);
+
+    // Calculate the OutLaunchVelocity and only if success, succeed
+    if (bHaveAimSolution)
     {
         // turns the OutLaunchVelocity into a normalized DirectionVector
         auto AimDirection = OutLaunchVelocity.GetSafeNormal();
         auto TankName = GetOwner()->GetName();
-        UE_LOG(LogTemp, Warning, TEXT("%s Aiming at %s "), *TankName, *AimDirection.ToString(),
-               *OutLaunchVelocity.ToString());
+        //         UE_LOG(LogTemp, Warning, TEXT("%s Aiming at %s "), *TankName, *AimDirection.ToString(),
+        //                *OutLaunchVelocity.ToString());
+        MoveBarrelTowards(AimDirection);
     }
+}
+
+void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
+{
+    // Pseudocode
+    // work-out difference between current barrel rotation and aim direction
+    auto BarrelRotator = Barrel->GetForwardVector().Rotation();
+    auto AimAsRotator = AimDirection.Rotation();
+    auto DeltaRotator = AimAsRotator - BarrelRotator;
+
+    Barrel->Elevate(5); // TODO remove magic number
 }
