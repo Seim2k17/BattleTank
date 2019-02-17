@@ -7,7 +7,7 @@
 #include "Tank.generated.h"
 
 class UTankAimingComponent;
-class UStaticMeshComponent;
+class UTankBarrel;
 
 UCLASS()
 class BATTLETANK_API ATank : public APawn
@@ -18,7 +18,7 @@ public:
     ATank();
 
     UFUNCTION(BlueprintCallable, Category = Setup)
-    void SetBarrelReference(UStaticMeshComponent* BarrelToSet);
+    void SetBarrelReference(UTankBarrel* BarrelToSet);
 
     void Tick(float DeltaTime) override;
 

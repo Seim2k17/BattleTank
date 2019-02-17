@@ -9,7 +9,7 @@ UTankAimingComponent::UTankAimingComponent()
     PrimaryComponentTick.bCanEverTick = false;
 }
 
-void UTankAimingComponent::SetBarrelReference(UStaticMeshComponent* BarrelToSet)
+void UTankAimingComponent::SetBarrelReference(UTankBarrel* BarrelToSet)
 {
     Barrel->SetBarrelReference(BarrelToSet);
 }
