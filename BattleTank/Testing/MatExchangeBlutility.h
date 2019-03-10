@@ -56,7 +56,11 @@ private:
     void FilterData(TArray<AActor*> SourceArray, FString LevelName,
                     OUT TArray<AActor*>& TargetArray);
 
-    void Replace(FString SourceMat, FString TargetMat, UStaticMeshActor* TargetMesh);
+    void Replace(FString SourceMat, FString TargetMat);
+
+	void ReplaceMaterial(AActor* Actor, FString TargetMat);
+
+	UMaterialInterface* FindMaterialInLibrary(FString TargetMat);
 
     FString LevelName = TEXT("99_EmpyTestMap");
 

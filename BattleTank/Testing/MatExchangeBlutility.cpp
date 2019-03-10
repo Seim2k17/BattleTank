@@ -7,20 +7,20 @@
 
 void UMatExchangeBlutility::GatherMaterials()
 {
-	UGameplayStatics::GetAllActorsOfClass(this, AStaticMeshActor::StaticClass(), SMActorArray);
+    UGameplayStatics::GetAllActorsOfClass(this, AStaticMeshActor::StaticClass(), SMActorArray);
 
-	FilterData(SMActorArray, LevelName, SMLevelArray);
+    FilterData(SMActorArray, LevelName, SMLevelArray);
 
-	FilterData(SMActorArray, LibraryName, SMLibraryArray);
+    FilterData(SMActorArray, LibraryName, SMLibraryArray);
 
-	GatherData(SMLibraryArray, SMActorLibraryMap);
+    GatherData(SMLibraryArray, SMActorLibraryMap);
 
-	GatherData(SMLevelArray, SMActorMaterialMap);
+    GatherData(SMLevelArray, SMActorMaterialMap);
 }
 
 void UMatExchangeBlutility::ReplaceMaterials()
 {
-   
+    Replace(SourceMat, TargetMat);
 }
 
 void UMatExchangeBlutility::GatherData(TArray<AActor*> SourceArray,
@@ -56,9 +56,55 @@ void UMatExchangeBlutility::FilterData(TArray<AActor*> SourceArray, FString Leve
         [LevelName](AActor* Mesh) { return (Mesh->GetFullName().Contains(LevelName)); });
 }
 
-void UMatExchangeBlutility::Replace(FString SourceMat, FString TargetMat,
-                                    UStaticMeshActor* TargetMesh)
+void UMatExchangeBlutility::Replace(FString SourceMat, FString TargetMat)
+{
+    for (auto Actor : SMActorMaterialMap)
+    {
+        for (auto Material : Actor.Value.Materials)
+        {
+            UE_LOG(LogTemp, Warning, TEXT("Actor: %s, Materials: %s"), *Actor.Key->GetName(),
+                   *Material->GetName());
+            if (Material->GetName().Contains(SourceMat))
+            {
+				ReplaceMaterial(Actor.Key, TargetMat);
+            }
+        }
+    }
+}
+
+void UMatExchangeBlutility::ReplaceMaterial(AActor* Actor, FString TargetMat)
+{
+	TArray<UActorComponent*> MeshComps =
+		Actor->GetComponentsByClass(UStaticMeshComponent::StaticClass());
+
+	for (auto* MeshComp : MeshComps)
+	{
+		if (auto* Component = Cast<UStaticMeshComponent>(MeshComp))
+		{
+			if (UMaterialInterface* TargetMaterial = FindMaterialInLibrary(TargetMat))
+			{
+				Component->SetMaterial(0, TargetMaterial);
+			}
+			
+		}
+	}
+}
+
+UMaterialInterface* UMatExchangeBlutility::FindMaterialInLibrary(FString TargetMat)
 {
 
+	UMaterialInterface* FoundMaterial = nullptr;
 
+	for (auto Actor : SMActorLibraryMap)
+	{
+		for (auto Material : Actor.Value.Materials)
+		{
+			if (Material->GetName().Contains(TargetMat))
+			{
+				FoundMaterial = Material;
+			}
+		}
+	}
+
+	return FoundMaterial;
 }
