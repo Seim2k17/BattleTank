@@ -8,7 +8,7 @@ ATank::ATank()
 {
     // Set this actor to call Tick() every frame.  You can turn this off to
     // improve performance if you don't need it.
-    PrimaryActorTick.bCanEverTick = true;
+    PrimaryActorTick.bCanEverTick = false;
 
     TankAimingComp = CreateDefaultSubobject<UTankAimingComponent>(FName("Aiming Component"));
 }
@@ -32,8 +32,3 @@ void ATank::AimAt(FVector HitLocation)
     TankAimingComp->AimAt(HitLocation, LaunchSpeed);
 }
 
-// Called every frame
-void ATank::Tick(float DeltaTime)
-{
-    Super::Tick(DeltaTime);
-}

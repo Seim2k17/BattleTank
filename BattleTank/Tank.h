@@ -20,8 +20,6 @@ public:
     UFUNCTION(BlueprintCallable, Category = Setup)
     void SetBarrelReference(UTankBarrel* BarrelToSet);
 
-    void Tick(float DeltaTime) override;
-
     void AimAt(FVector HitLocation);
 
     UPROPERTY(EditAnywhere, Category = Firing)

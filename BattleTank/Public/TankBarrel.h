@@ -12,9 +12,9 @@ class BATTLETANK_API UTankBarrel : public UStaticMeshComponent
     GENERATED_BODY()
 
 public:
-    void Elevate(float DegreesPerSeconds);
+	// -1 = MaxDownward Speed, +1 = Max Up Movement
+    void Elevate(float RelativeSpeed);
 
-    void SetBarrelReference(UStaticMeshComponent* BarrelMeshToSet);
 
 private:
     UStaticMeshComponent* BarrelMesh = nullptr;

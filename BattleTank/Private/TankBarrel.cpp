@@ -2,16 +2,13 @@
 
 #include "TankBarrel.h"
 
-void UTankBarrel::Elevate(float DegreesPerSeconds)
+void UTankBarrel::Elevate(float RelativeSpeed)
 {
     // move the barrel the right ammount this frame
 
     // given a max elevation speed, and the frame time
-
-    UE_LOG(LogTemp, Warning, TEXT("Elevate called"));
+	auto Time = GetWorld()->GetTimeSeconds();
+    UE_LOG(LogTemp, Warning, TEXT("%f : Elevate called with Speed: %f"),Time, RelativeSpeed);
 }
 
-void UTankBarrel::SetBarrelReference(UStaticMeshComponent* BarrelMeshToSet)
-{
-    BarrelMesh = BarrelMeshToSet;
-}
+
